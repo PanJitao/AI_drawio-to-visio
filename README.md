@@ -2,15 +2,23 @@
 
 将 draw.io 流程图转换为 Microsoft Visio 可编辑的 SVG 格式。
 
-## 问题背景
+## 背景
 
-draw.io（现 diagrams.net）导出的 SVG 文件使用 `<foreignObject>` 元素嵌入 HTML 文本，Microsoft Visio 对此支持有限，导致导入后出现：
+在当前的技术生态中，AI 辅助工具已经能够生成 draw.io 格式的流程图文件，但无法直接生成 Visio 原生的 `.vsdx` 格式。VSDX 是基于 Open XML 的复杂格式，程序化生成的文件在 Visio 中打开时经常报错，组件丢失或结构无效。
+
+因此，**draw.io → SVG → Visio** 成为了一条看似可行的转换路径。然而，draw.io 导出的 SVG 使用 `<foreignObject>` 元素嵌入 HTML 文本来渲染中文及特殊字符，而 Microsoft Visio 对 `<foreignObject>` 的支持极为有限，导致导入后出现：
+
 - 文字位置全部偏移
-- 文本无法编辑
+- 中文文本无法正确显示
+- 文本内容无法编辑
+
+两个工具生态之间的这种不兼容，使得 AI 生成的流程图无法顺利进入 Visio 工作流。
+
+本 Skill 正是为了解决这一问题而生——将 draw.io SVG 中的 `<foreignObject>` 文本转换为 Visio 能够正确识别和编辑的标准 SVG `<text>` 元素，打通 **AI 生成 → draw.io → Visio** 的完整链路。
 
 ## 解决方案
 
-本工具将 `foreignObject` 文本转换为标准 SVG `<text>` 元素，保留字体、字号、颜色、位置等样式信息，使 Visio 能够正确显示和编辑。
+本工具解析 draw.io 导出的 SVG，将 `<foreignObject>` 文本转换为标准 SVG `<text>` 元素，保留字体、字号、颜色、位置等样式信息，使 Visio 能够正确显示和编辑。
 
 ## 安装
 
